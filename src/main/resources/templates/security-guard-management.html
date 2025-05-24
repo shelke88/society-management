@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Security Guard Management - API Interaction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-primary">Security Guard Management</h1>
+
+    <!-- Section: Get All Guards -->
+    <section>
+        <h2 class="text-secondary">Get All Guards</h2>
+        <button class="btn btn-primary" onclick="getAllGuards()">Fetch Guards</button>
+        <pre id="allGuardsOutput"></pre>
+    </section>
+
+    <!-- Section: Add Guard -->
+    <section>
+        <h2 class="text-secondary">Add Security Guard</h2>
+        <form id="addGuardForm">
+            <div class="mb-3">
+                <label for="addName" class="form-label">Name:</label>
+                <input type="text" id="addName" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="addContactNumber" class="form-label">Contact Number:</label>
+                <input type="text" id="addContactNumber" name="contactNumber" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="addAddress" class="form-label">Address:</label>
+                <input type="text" id="addAddress" name="address" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="addShiftTiming" class="form-label">Shift Timing:</label>
+                <input type="text" id="addShiftTiming" name="shiftTiming" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="addAssignedArea" class="form-label">Assigned Area:</label>
+                <input type="text" id="addAssignedArea" name="assignedArea" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="addStatus" class="form-label">Status:</label>
+                <select id="addStatus" name="status" class="form-control" required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="addJoiningDate" class="form-label">Joining Date:</label>
+                <input type="date" id="addJoiningDate" name="joiningDate" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="addSalary" class="form-label">Salary:</label>
+                <input type="number" id="addSalary" name="salary" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="addPhoto" class="form-label">Photo URL:</label>
+                <input type="url" id="addPhoto" name="photo" class="form-control">
+            </div>
+            <button type="button" class="btn btn-success" onclick="addGuard()">Add Guard</button>
+        </form>
+    </section>
+
+    <!-- Section: Update Guard -->
+    <section>
+        <h2 class="text-secondary">Update Security Guard</h2>
+        <form id="updateGuardForm">
+            <div class="mb-3">
+                <label for="updateId" class="form-label">ID:</label>
+                <input type="text" id="updateId" name="id" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="updateName" class="form-label">Name:</label>
+                <input type="text" id="updateName" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="updateContactNumber" class="form-label">Contact Number:</label>
+                <input type="text" id="updateContactNumber" name="contactNumber" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="updateAddress" class="form-label">Address:</label>
+                <input type="text" id="updateAddress" name="address" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="updateShiftTiming" class="form-label">Shift Timing:</label>
+                <input type="text" id="updateShiftTiming" name="shiftTiming" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="updateAssignedArea" class="form-label">Assigned Area:</label>
+                <input type="text" id="updateAssignedArea" name="assignedArea" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="updateStatus" class="form-label">Status:</label>
+                <select id="updateStatus" name="status" class="form-control" required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="updateJoiningDate" class="form-label">Joining Date:</label>
+                <input type="date" id="updateJoiningDate" name="joiningDate" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="updateSalary" class="form-label">Salary:</label>
+                <input type="number" id="updateSalary" name="salary" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="updatePhoto" class="form-label">Photo URL:</label>
+                <input type="url" id="updatePhoto" name="photo" class="form-control">
+            </div>
+            <button type="button" class="btn btn-warning" onclick="updateGuard()">Update Guard</button>
+        </form>
+    </section>
+
+    <!-- Section: Delete Guard -->
+    <section>
+        <h2 class="text-secondary">Delete Security Guard</h2>
+        <form id="deleteGuardForm">
+            <div class="mb-3">
+                <label for="deleteId" class="form-label">ID:</label>
+                <input type="text" id="deleteId" name="id" class="form-control" required>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="deleteGuard()">Delete Guard</button>
+        </form>
+    </section>
+</div>
+
+<!-- Section: Get Current Shift Guards -->
+<section>
+    <h2 class="text-secondary">Get Current Shift Guards</h2>
+    <form id="currentShiftForm">
+        <div class="mb-3">
+            <label for="shiftTiming" class="form-label">Shift Timing:</label>
+            <input type="text" id="shiftTiming" name="shiftTiming" class="form-control" placeholder="e.g., Morning, Evening, Night" required>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="getCurrentShiftGuards()">Fetch Guards</button>
+    </form>
+    <pre id="currentShiftOutput"></pre>
+</section>
+
+<!-- Section: Delete All Guards -->
+<section>
+    <h2 class="text-secondary">Delete All Guards</h2>
+    <button class="btn btn-danger" onclick="deleteAllGuards()">Delete All Guards</button>
+</section>
+
+<script>
+    async function getCurrentShiftGuards() {
+        const shiftTiming = document.getElementById('shiftTiming').value;
+
+        try {
+            const response = await fetch(`/get-current-shift/${shiftTiming}`);
+            const data = await response.json();
+            document.getElementById('currentShiftOutput').textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            console.error('Error fetching current shift guards:', error);
+        }
+    }
+
+    async function deleteAllGuards() {
+        try {
+            const response = await fetch('/delete-all-guards', {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                alert('All guards deleted successfully!');
+            } else {
+                alert('Failed to delete all guards.');
+            }
+        } catch (error) {
+            console.error('Error deleting all guards:', error);
+        }
+    }
+</script>
+
+<script>
+    async function getAllGuards() {
+        try {
+            const response = await fetch('/get-guards');
+            const data = await response.json();
+            document.getElementById('allGuardsOutput').textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            console.error('Error fetching guards:', error);
+        }
+    }
+
+    async function addGuard() {
+        const data = {
+            name: document.getElementById('addName').value,
+            contactNumber: document.getElementById('addContactNumber').value,
+            address: document.getElementById('addAddress').value,
+            shiftTiming: document.getElementById('addShiftTiming').value,
+            assignedArea: document.getElementById('addAssignedArea').value,
+            status: document.getElementById('addStatus').value,
+            joiningDate: document.getElementById('addJoiningDate').value,
+            salary: document.getElementById('addSalary').value,
+            photo: document.getElementById('addPhoto').value
+        };
+
+        try {
+            const response = await fetch('/add-guards', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('Guard added successfully!');
+            } else {
+                alert('Failed to add guard.');
+            }
+        } catch (error) {
+            console.error('Error adding guard:', error);
+        }
+    }
+
+    async function updateGuard() {
+        const id = document.getElementById('updateId').value;
+        const data = {
+            name: document.getElementById('updateName').value,
+            contactNumber: document.getElementById('updateContactNumber').value,
+            address: document.getElementById('updateAddress').value,
+            shiftTiming: document.getElementById('updateShiftTiming').value,
+            assignedArea: document.getElementById('updateAssignedArea').value,
+            status: document.getElementById('updateStatus').value,
+            joiningDate: document.getElementById('updateJoiningDate').value,
+            salary: document.getElementById('updateSalary').value,
+            photo: document.getElementById('updatePhoto').value
+        };
+
+        try {
+            const response = await fetch(`/update-guard/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('Guard updated successfully!');
+            } else {
+                alert('Failed to update guard.');
+            }
+        } catch (error) {
+            console.error('Error updating guard:', error);
+        }
+    }
+
+    async function deleteGuard() {
+        const id = document.getElementById('deleteId').value;
+
+        try {
+            const response = await fetch(`/delete-guard/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                alert('Guard deleted successfully!');
+            } else {
+                alert('Failed to delete guard.');
+            }
+        } catch (error) {
+            console.error('Error deleting guard:', error);
+        }
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
